@@ -3,9 +3,11 @@ package com.naoyaapp.voicetimer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.View
+import android.widget.Button
 import java.util.*
 
-class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnClickListener {
 
     private var textToSpeech: TextToSpeech? = null
 
@@ -15,6 +17,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         // TTS インスタンス生成
         textToSpeech = TextToSpeech(this, this)
+
+        val startButton: Button = findViewById(R.id.Button_tts)
+        startButton.setOnClickListener(this)
     }
 
     override fun onInit(status: Int) {
@@ -32,6 +37,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
     }
 
+    override fun onClick(v: View?) {
+        startSpeak("てすと", true)
+    }
     private fun startSpeak(text: String, isImmediately: Boolean) {
         /*
         * 読み上げ開始
