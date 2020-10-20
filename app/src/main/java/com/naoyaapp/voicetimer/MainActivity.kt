@@ -37,22 +37,25 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         }
     }
 
+    /* ボタンクリック時 */
     override fun onClick(v: View?) {
-        startSpeak("てすと", true)
+        var speakText: String = "てすと"
+        startSpeak(speakText, true)
     }
+
+    /*
+    * 読み上げ開始
+    * text：読み上げるテキスト
+    * queueMode：キューイングモード（QUEUE_ADDまたはQUEUE_FLUSH）
+    * 　　QUEUE_ADD：キューに追加され、順番に読み上げられる
+    *    QUEUE_FLUSH：すぐに読み上げを開始
+    * パラメータとしてbundleを渡すことができる
+    *    KEY_PARAM_STREAM：オーディオストリームを変更する際に利用
+    *    KEY_PARAM_VOLUME：音のボリュームを調整するのに利用
+    *    KEY_PARAM_PAN：音の定位を調整するのに利用
+    * utteranceId：固有の識別子
+    *  */
     private fun startSpeak(text: String, isImmediately: Boolean) {
-        /*
-        * 読み上げ開始
-        * text：読み上げるテキスト
-        * queueMode：キューイングモード（QUEUE_ADDまたはQUEUE_FLUSH）
-        * 　　QUEUE_ADD：キューに追加され、順番に読み上げられる
-        *    QUEUE_FLUSH：すぐに読み上げを開始
-        * パラメータとしてbundleを渡すことができる
-        *    KEY_PARAM_STREAM：オーディオストリームを変更する際に利用
-        *    KEY_PARAM_VOLUME：音のボリュームを調整するのに利用
-        *    KEY_PARAM_PAN：音の定位を調整するのに利用
-        * utteranceId：固有の識別子
-        *  */
         textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
     }
 
