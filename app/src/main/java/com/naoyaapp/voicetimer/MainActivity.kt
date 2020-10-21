@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
 
     private var textToSpeech: TextToSpeech? = null
 
-    private var timerText: TextView
+    private var timerText: TextView? = null
     private val dataFormat: SimpleDateFormat = SimpleDateFormat("mm:ss", Locale.JAPAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +24,17 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         textToSpeech = TextToSpeech(this, this)
 
         // 仮のボタン設定
-        val startButton: Button = findViewById(R.id.Button_tts)
-        startButton.setOnClickListener(this)
+        val ttsButton: Button = findViewById(R.id.Button_tts)
+        ttsButton.setOnClickListener(this)
 
         // 仮の時間設定
         val countNumber: Long = 180000
         val interval: Long = 10
+        val startButton: Button = findViewById(R.id.start_button)
+        val stopButton: Button = findViewById(R.id.stop_button)
+
+        timerText = findViewById(R.id.timer)
+        timerText?.setText(dataFormat.format(0))
     }
 
     override fun onInit(status: Int) {
