@@ -5,11 +5,16 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnClickListener {
 
     private var textToSpeech: TextToSpeech? = null
+
+    private var timerText: TextView
+    private val dataFormat: SimpleDateFormat = SimpleDateFormat("mm:ss", Locale.JAPAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,8 +23,13 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         // TTS インスタンス生成
         textToSpeech = TextToSpeech(this, this)
 
+        // 仮のボタン設定
         val startButton: Button = findViewById(R.id.Button_tts)
         startButton.setOnClickListener(this)
+
+        // 仮の時間設定
+        val countNumber: Long = 180000
+        val interval: Long = 10
     }
 
     override fun onInit(status: Int) {
