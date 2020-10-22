@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.*
+import android.os.CountDownTimer
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnClickListener {
 
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //**********************************************************
+        // TTS関連
+        //**********************************************************
         // TTS インスタンス生成
         textToSpeech = TextToSpeech(this, this)
 
@@ -27,6 +31,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         val ttsButton: Button = findViewById(R.id.Button_tts)
         ttsButton.setOnClickListener(this)
 
+        //**********************************************************
+        // カウントダウン関連
+        //**********************************************************
         // 仮の時間設定
         val countNumber: Long = 180000
         val interval: Long = 10
@@ -34,7 +41,36 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         val stopButton: Button = findViewById(R.id.stop_button)
 
         timerText = findViewById(R.id.timer)
-        timerText?.setText(dataFormat.format(0))
+        timerText!!.text = dataFormat.format(0)
+
+        // インスタンス生成
+        val countDown  = CountDown(countNumber, interval)
+        startButton.setOnClickListener {
+            countDown.start()
+        }
+        stopButton.setOnClickListener{
+            countDown.cancel()
+            timerText!!.text = dataFormat.format(0)
+        }
+    }
+
+    /* カウントダウン処理 */
+    internal inner class CountDown(millisInFuture: Long, countDownInterval: Long):
+        CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onFinish() {
+            // 完了
+            timerText!!.text= dataFormat.format(0)
+        }
+
+        // インターバルで呼ばれる
+        override fun onTick(millisUntilFinished: Long) {
+            // 残り時間を分、秒、ミリ秒に分割
+            //long mm = millisUntilFinished / 1000 / 60;
+            //long ss = millisUntilFinished / 1000 % 60;
+            //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
+            //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
+            timerText!!.text = dataFormat.format(millisUntilFinished)
+        }
     }
 
     override fun onInit(status: Int) {
