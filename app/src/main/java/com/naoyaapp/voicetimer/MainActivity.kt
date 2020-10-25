@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
     private var textToSpeech: TextToSpeech? = null
 
     private var timerText: TextView? = null
-    private val dataFormat: SimpleDateFormat = SimpleDateFormat("mm:ss", Locale.JAPAN)
+    private val dataFormat: SimpleDateFormat = SimpleDateFormat("HH:mm:ss", Locale.JAPAN)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
     }
 
     /* カウントダウン処理 */
+
     internal inner class CountDown(millisInFuture: Long, countDownInterval: Long):
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
@@ -70,6 +71,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
             //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
             //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
             timerText!!.text = dataFormat.format(millisUntilFinished)
+            // TTSを呼び出して喋ってもらう
+            startSpeak(dataFormat.format(millisUntilFinished), true)
         }
     }
 
@@ -90,7 +93,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
 
     /* ボタンクリック時 */
     override fun onClick(v: View?) {
-        var speakText: String = "てすと"
+        var speakText: String = "てすとです"
         startSpeak(speakText, true)
     }
 
