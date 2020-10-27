@@ -11,10 +11,10 @@
 
     <TextView
         android:id="@+id/time_hh"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="24dp"
         android:text="00"
         android:textColor="#00f"
@@ -27,12 +27,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="24dp"
         android:text="00"
         android:textColor="#00f"
         android:textSize="60sp"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toEndOf="@+id/text_hours"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -40,14 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="5dp"
         android:text="00"
         android:textColor="#00f"
         android:textSize="60sp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName3"
-        app:layout_constraintHorizontal_bias="0.259"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"
+        app:layout_constraintStart_toEndOf="@+id/text_minutes"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -82,41 +80,47 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stop_button" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
+    <TextView
+        android:id="@+id/text_hours"
         android:layout_width="30dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="5dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="3dp"
         android:layout_marginBottom="4dp"
         android:ems="8"
         android:inputType="textPersonName"
         android:text="h"
-        android:textSize="10sp"
+        android:textColor="#00f"
+        android:textSize="24sp"
+        android:gravity="center_horizontal|bottom"
         app:layout_constraintBottom_toBottomOf="@+id/time_hh"
         app:layout_constraintStart_toEndOf="@+id/time_hh" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
+    <TextView
+        android:id="@+id/text_minutes"
         android:layout_width="30dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="4dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="3dp"
         android:ems="8"
         android:inputType="textPersonName"
         android:text="m"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
+        android:textColor="#00f"
+        android:textSize="24sp"
+        android:gravity="center_horizontal|bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/text_hours"
         app:layout_constraintStart_toEndOf="@+id/time_mm" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName3"
+    <TextView
+        android:id="@+id/text_seconds"
         android:layout_width="30dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="5dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="3dp"
         android:ems="8"
         android:inputType="textPersonName"
         android:text="s"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textColor="#00f"
+        android:textSize="24sp"
+        android:gravity="center_horizontal|bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/text_hours"
+        app:layout_constraintStart_toEndOf="@+id/time_ss" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

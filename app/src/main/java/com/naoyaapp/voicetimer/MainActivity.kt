@@ -15,7 +15,11 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
     private var textToSpeech: TextToSpeech? = null
 
     private var txtTimerHours: TextView? = null
-    private val dataFormat: SimpleDateFormat = SimpleDateFormat("mm'm'ss's'", Locale.US)
+    private var txtTimerMinutes: TextView? = null
+    private var txtTimerSeconds: TextView? = null
+    private val dataFormatHours: SimpleDateFormat = SimpleDateFormat("HH", Locale.US)
+    private val dataFormatMinutes: SimpleDateFormat = SimpleDateFormat("mm", Locale.US)
+    private val dataFormatSeconds: SimpleDateFormat = SimpleDateFormat("ss", Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +46,11 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
 
         // カウントの初期表示
         txtTimerHours = findViewById(R.id.time_hh)
-        txtTimerHours!!.text = dataFormat.format(countNumber)
+        txtTimerMinutes = findViewById(R.id.time_mm)
+        txtTimerSeconds = findViewById(R.id.time_ss)
+        txtTimerHours!!.text = dataFormatHours.format(countNumber)
+        txtTimerMinutes!!.text = dataFormatMinutes.format(countNumber)
+        txtTimerSeconds!!.text = dataFormatSeconds.format(countNumber)
 
         // インスタンス生成
         val countDown  = CountDown(countNumber, interval)
@@ -51,7 +59,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         }
         stopButton.setOnClickListener{
             countDown.cancel()
-            txtTimerHours!!.text = dataFormat.format(0)
+            txtTimerHours!!.text = dataFormatHours.format(0)
+            txtTimerMinutes!!.text = dataFormatMinutes.format(0)
+            txtTimerSeconds!!.text = dataFormatSeconds.format(0)
         }
     }
 
@@ -61,18 +71,21 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             // 完了
-            txtTimerHours!!.text= dataFormat.format(0)
+            txtTimerHours!!.text= dataFormatHours.format(0)
+            txtTimerMinutes!!.text= dataFormatMinutes.format(0)
+            txtTimerSeconds!!.text= dataFormatSeconds.format(0)
         }
 
         // インターバルで呼ばれる
         override fun onTick(millisUntilFinished: Long) {
-            val time = dataFormat.format(millisUntilFinished)
             // 残り時間を分、秒、ミリ秒に分割
             //long mm = millisUntilFinished / 1000 / 60;
             //long ss = millisUntilFinished / 1000 % 60;
             //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
             //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
-            txtTimerHours!!.text = time
+            txtTimerHours!!.text = dataFormatHours.format(millisUntilFinished)
+            txtTimerMinutes!!.text = dataFormatMinutes.format(millisUntilFinished)
+            txtTimerSeconds!!.text = dataFormatSeconds.format(millisUntilFinished)
 
             // 分と秒を取得
             val numMM = kotlin.math.floor(millisUntilFinished / 1000.0 / 60.0).toInt()
