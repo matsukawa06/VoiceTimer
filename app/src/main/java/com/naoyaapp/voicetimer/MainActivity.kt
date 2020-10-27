@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
 
     private var textToSpeech: TextToSpeech? = null
 
-    private var timerText: TextView? = null
-    private val dataFormat: SimpleDateFormat = SimpleDateFormat("HH:mm:ss", Locale.JAPAN)
+    private var txtTimerHours: TextView? = null
+    private val dataFormat: SimpleDateFormat = SimpleDateFormat("mm'm'ss's'", Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +34,15 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         //**********************************************************
         // カウントダウン関連
         //**********************************************************
-        // 仮の時間設定
-        val countNumber: Long = 180000
-        val interval: Long = 10
+        // 仮の時間設定(ミリ秒)
+        val countNumber: Long = 1000 * 15
+        val interval: Long = 1000
         val startButton: Button = findViewById(R.id.start_button)
         val stopButton: Button = findViewById(R.id.stop_button)
 
-        timerText = findViewById(R.id.timer)
-        timerText!!.text = dataFormat.format(0)
+        // カウントの初期表示
+        txtTimerHours = findViewById(R.id.time_hh)
+        txtTimerHours!!.text = dataFormat.format(countNumber)
 
         // インスタンス生成
         val countDown  = CountDown(countNumber, interval)
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         }
         stopButton.setOnClickListener{
             countDown.cancel()
-            timerText!!.text = dataFormat.format(0)
+            txtTimerHours!!.text = dataFormat.format(0)
         }
     }
 
@@ -60,19 +61,44 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
         CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() {
             // 完了
-            timerText!!.text= dataFormat.format(0)
+            txtTimerHours!!.text= dataFormat.format(0)
         }
 
         // インターバルで呼ばれる
         override fun onTick(millisUntilFinished: Long) {
+            val time = dataFormat.format(millisUntilFinished)
             // 残り時間を分、秒、ミリ秒に分割
             //long mm = millisUntilFinished / 1000 / 60;
             //long ss = millisUntilFinished / 1000 % 60;
             //long ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60;
             //timerText.setText(String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms));
-            timerText!!.text = dataFormat.format(millisUntilFinished)
-            // TTSを呼び出して喋ってもらう
-            startSpeak(dataFormat.format(millisUntilFinished), true)
+            txtTimerHours!!.text = time
+
+            // 分と秒を取得
+            val numMM = kotlin.math.floor(millisUntilFinished / 1000.0 / 60.0).toInt()
+            val numSS = kotlin.math.floor(millisUntilFinished / 1000.0 % 60.0).toInt()
+
+            if(numMM == 0 && numSS <= 5) {
+                // 1秒毎にカウント
+                startSpeak(numSS.toString(), true)
+            }
+            if(numSS % 10 == 0) {
+                var strSpeech : String = ""
+                if(numMM > 0) {
+                    // 分があれば設定
+                    strSpeech = numMM.toString() + "分"
+                }
+                if(numSS != 0) {
+                    strSpeech = strSpeech + numSS.toShort() + "秒"
+                }
+                if(strSpeech != "") {
+                    strSpeech += "前"
+                }
+
+                // TTSを呼び出して喋ってもらう
+                startSpeak(strSpeech, true)
+            }
+
         }
     }
 
@@ -101,7 +127,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
     * 読み上げ開始
     * text：読み上げるテキスト
     * queueMode：キューイングモード（QUEUE_ADDまたはQUEUE_FLUSH）
-    * 　　QUEUE_ADD：キューに追加され、順番に読み上げられる
+    *    QUEUE_ADD：キューに追加され、順番に読み上げられる
     *    QUEUE_FLUSH：すぐに読み上げを開始
     * パラメータとしてbundleを渡すことができる
     *    KEY_PARAM_STREAM：オーディオストリームを変更する際に利用
@@ -110,7 +136,10 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener, View.OnCl
     * utteranceId：固有の識別子
     *  */
     private fun startSpeak(text: String, isImmediately: Boolean) {
-        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId")
+        // 読み上げのスピード（デフォルト1.0、例えば2.0なら倍のスピード）
+        textToSpeech?.setSpeechRate(1.1f)
+        // 実行
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_ADD, null, "utteranceId")
     }
 
     /* 終了処理 */
